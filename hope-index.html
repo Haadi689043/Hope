@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fff7ef">
+  <meta name="description" content="HOPE — A little light for every day. Find a quote, pause, and take one small step forward.">
+  <title>HOPE — A little light for every day</title>
+  <style>
+    :root {
+      --bg: #fff8f1; --paper: rgba(255,255,255,.82); --ink: #342d35;
+      --muted: #80737b; --peach: #f6c6a7; --rose: #e99d98;
+      --gold: #e9b95f; --coral: #c66d60; --line: rgba(118,80,73,.14);
+      --shadow: 0 18px 50px rgba(116, 76, 62, .10); --green: #6d8870;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; min-height: 100vh; color: var(--ink);
+      background:
+        radial-gradient(ellipse at 7% 0%, rgba(255,210,173,.55), transparent 34rem),
+        radial-gradient(ellipse at 94% 15%, rgba(246,195,195,.45), transparent 30rem),
+        linear-gradient(180deg, #fff8f1 0%, #fffaf6 54%, #fff5ee 100%);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    button, textarea, input { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, textarea:focus-visible, input:focus-visible { outline: 3px solid #e7a08c; outline-offset: 3px; }
+    .wrap { width: min(1120px, calc(100% - 36px)); margin: 0 auto; }
+    header { display:flex; align-items:center; justify-content:space-between; gap:18px; padding:25px 0; }
+    .brand { display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit; }
+    .brand-mark { width:44px; height:44px; border-radius:16px; display:grid; place-items:center; background:linear-gradient(145deg,#ffe5b8,#f5b8a7); box-shadow:0 8px 20px #d78d6730; }
+    .brand-mark svg { width:26px; height:26px; }
+    .brand-name { font-size:20px; font-weight:850; letter-spacing:.16em; }
+    .tagline { color:var(--muted); font-size:12px; margin-top:2px; }
+    .top-actions { display:flex; align-items:center; gap:9px; }
+    .pill, .icon-btn { border:1px solid var(--line); color:var(--ink); background:#ffffffa8; border-radius:999px; padding:10px 14px; font-weight:650; font-size:13px; }
+    .icon-btn { width:42px; height:42px; padding:0; display:grid; place-items:center; font-size:18px; }
+    .streak-pill { display:flex; align-items:center; gap:7px; }
+    .hero { display:grid; grid-template-columns:1.1fr .9fr; align-items:center; gap:36px; padding:44px 0 46px; }
+    .eyebrow { display:inline-flex; align-items:center; gap:8px; color:#9d6355; font-size:12px; font-weight:800; text-transform:uppercase; letter-spacing:.14em; }
+    .eyebrow:before { content:""; width:23px; height:1px; background:currentColor; }
+    h1 { font-size:clamp(42px, 6vw, 70px); line-height:1.02; letter-spacing:-.055em; margin:19px 0 18px; max-width:600px; }
+    h1 span { color:#c87967; font-family:Georgia, "Times New Roman", serif; font-weight:500; font-style:italic; }
+    .hero-copy { color:var(--muted); font-size:17px; line-height:1.8; max-width:490px; margin:0 0 25px; }
+    .hero-note { display:flex; align-items:center; gap:11px; font-size:13px; color:#8c7471; }
+    .tiny-sun { width:34px; height:34px; border-radius:50%; display:grid; place-items:center; background:#ffe9c8; color:#a96b3c; font-size:17px; }
+    .sunrise-art { position:relative; min-height:340px; overflow:hidden; border-radius:36px; background:linear-gradient(165deg,#f8c5a6 0%,#f8d9bd 38%,#f6e4cf 68%,#f0c2ad 100%); box-shadow:var(--shadow); }
+    .sunrise-art:before { content:""; position:absolute; width:250px; height:250px; left:50%; top:45px; transform:translateX(-50%); border-radius:50%; background:radial-gradient(circle at 40% 35%,#fff6cb,#ffd888 58%,#f6b76f); box-shadow:0 0 80px #fff3bd9c; }
+    .hill { position:absolute; bottom:-30px; width:120%; height:160px; left:-10%; border-radius:50% 50% 0 0 / 30% 30% 0 0; }
+    .hill.one { background:#d98f7e; bottom:-54px; transform:rotate(-7deg); }
+    .hill.two { background:#bd8178; bottom:-94px; left:-3%; transform:rotate(7deg); }
+    .art-caption { position:absolute; top:25px; left:25px; color:#8b574d; font-size:11px; font-weight:800; letter-spacing:.15em; text-transform:uppercase; }
+    .art-quote { position:absolute; bottom:24px; left:25px; right:25px; color:#fffaf5; font:italic 19px/1.35 Georgia,serif; text-shadow:0 2px 12px #7c514a50; }
+    .art-quote small { display:block; margin-top:9px; font:700 10px/1.3 system-ui,sans-serif; letter-spacing:.13em; text-transform:uppercase; }
+    .section-head { display:flex; align-items:end; justify-content:space-between; gap:16px; margin:8px 0 17px; }
+    h2 { font-size:23px; letter-spacing:-.035em; margin:0; }
+    .section-sub { color:var(--muted); font-size:13px; margin-top:5px; }
+    .daily-card { position:relative; border:1px solid #f2d7c8; background:linear-gradient(130deg,#fffdf9,#fff0e5); border-radius:28px; padding:clamp(23px,4vw,42px); box-shadow:var(--shadow); overflow:hidden; }
+    .daily-card:after { content:"“"; position:absolute; right:24px; top:-37px; color:#f2d6c2; font:190px Georgia,serif; pointer-events:none; }
+    .daily-top { display:flex; align-items:center; justify-content:space-between; gap:12px; position:relative; z-index:1; }
+    .date-label { color:#a36e5c; font-size:11px; font-weight:800; letter-spacing:.13em; text-transform:uppercase; }
+    .category-chip { background:#fbe3d2; color:#9a6556; border-radius:999px; padding:7px 11px; font-size:11px; font-weight:750; }
+    .quote-text { position:relative; z-index:1; font:clamp(25px,3.7vw,39px)/1.32 Georgia, "Times New Roman", serif; letter-spacing:-.025em; max-width:820px; margin:28px 0 17px; }
+    .quote-author { position:relative; z-index:1; color:var(--muted); font-size:14px; }
+    .quote-actions { display:flex; flex-wrap:wrap; gap:10px; margin-top:27px; position:relative; z-index:1; }
+    .btn { border:0; border-radius:999px; padding:12px 17px; font-weight:750; font-size:13px; display:inline-flex; align-items:center; justify-content:center; gap:8px; transition:transform .15s, filter .15s; }
+    .btn:hover { transform:translateY(-1px); filter:brightness(.99); }
+    .btn-primary { color:white; background:#bd7565; box-shadow:0 8px 18px #bd75652b; }
+    .btn-soft { color:#8e5e52; background:#f8e3d6; }
+    .btn-plain { color:#66535a; background:#fff; border:1px solid var(--line); }
+    .btn.saved { color:#a74f5d; background:#ffe2e5; }
+    .main-grid { display:grid; grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr); gap:22px; padding:48px 0; }
+    .panel { border:1px solid var(--line); border-radius:24px; background:var(--paper); box-shadow:0 10px 35px #79503d08; padding:24px; min-width:0; }
+    .panel-head { display:flex; align-items:start; justify-content:space-between; gap:12px; margin-bottom:19px; }
+    .panel-head h2 { font-size:20px; }
+    .small-label { color:var(--muted); font-size:12px; line-height:1.6; margin-top:5px; }
+    .category-list { display:flex; flex-wrap:wrap; gap:8px; margin:17px 0 20px; }
+    .category-btn { border:1px solid var(--line); border-radius:999px; background:#fff; color:#76666c; padding:9px 12px; font-size:12px; font-weight:700; }
+    .category-btn.active { border-color:#d79580; background:#fae4d7; color:#8e594d; }
+    .quote-list { display:grid; gap:10px; }
+    .quote-item { padding:16px; border:1px solid #f0e4dd; background:#fffdfa; border-radius:17px; }
+    .quote-item-top { display:flex; justify-content:space-between; gap:10px; align-items:center; }
+    .quote-item .quote-cat { font-size:10px; color:#a06b5b; font-weight:800; letter-spacing:.1em; text-transform:uppercase; }
+    .quote-item p { font:17px/1.5 Georgia,serif; margin:11px 0 8px; }
+    .quote-item .author { color:var(--muted); font-size:12px; }
+    .mini-actions { display:flex; gap:6px; }
+    .mini-btn { border:1px solid var(--line); background:#fff; color:#8b6d69; border-radius:10px; min-width:33px; height:31px; padding:0 8px; }
+    .empty { padding:26px 14px; text-align:center; color:var(--muted); line-height:1.7; font-size:13px; }
+    .side-stack { display:grid; gap:20px; align-content:start; }
+    .streak-card { background:linear-gradient(145deg,#fff1d8,#fffaf1); }
+    .streak-number { font:52px/1 Georgia,serif; color:#bb7958; letter-spacing:-.05em; margin:14px 0 7px; }
+    .streak-days { display:flex; gap:7px; margin-top:19px; }
+    .day { flex:1; min-width:0; text-align:center; color:#9a8580; font-size:10px; }
+    .day-dot { width:31px; height:31px; border-radius:50%; display:grid; place-items:center; margin:0 auto 7px; background:#fff; border:1px solid #efdfd1; color:#b4a09a; font-size:12px; }
+    .day-dot.done { background:#e7b86b; border-color:#e7b86b; color:white; }
+    .day-dot.today { outline:2px solid #d9a092; outline-offset:2px; }
+    .journal-prompt { background:#f3eee9; border-radius:15px; padding:13px; font:italic 16px/1.5 Georgia,serif; margin:15px 0; color:#6f5d5b; }
+    textarea { display:block; width:100%; resize:vertical; min-height:116px; padding:13px; border:1px solid #eadbd3; border-radius:14px; background:#fffdfa; color:var(--ink); line-height:1.6; font-size:13px; }
+    .journal-footer { display:flex; align-items:center; justify-content:space-between; gap:10px; margin-top:11px; }
+    .save-status { font-size:11px; color:var(--muted); }
+    .journal-history { margin-top:13px; display:grid; gap:7px; }
+    .journal-entry { border-top:1px solid var(--line); padding-top:10px; font-size:12px; line-height:1.6; color:#796b70; }
+    .journal-entry strong { display:block; color:#9a6b5e; margin-bottom:3px; }
+    .favorites-section { padding:0 0 50px; }
+    .favorites-section .panel { padding:24px; }
+    footer { border-top:1px solid var(--line); padding:26px 0 35px; color:var(--muted); font-size:12px; }
+    .footer-inner { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; }
+    .toast { position:fixed; bottom:22px; left:50%; transform:translate(-50%,20px); background:#393037; color:#fff; border-radius:999px; padding:12px 18px; font-size:13px; box-shadow:var(--shadow); opacity:0; pointer-events:none; transition:all .2s; z-index:5; max-width:calc(100% - 30px); text-align:center; }
+    .toast.show { opacity:1; transform:translate(-50%,0); }
+    .modal-backdrop { position:fixed; inset:0; background:#382a2b66; display:none; align-items:center; justify-content:center; padding:20px; z-index:10; }
+    .modal-backdrop.open { display:flex; }
+    .modal { width:min(440px,100%); border-radius:24px; background:#fffaf6; padding:25px; box-shadow:var(--shadow); }
+    .modal h2 { margin-bottom:9px; }
+    .modal p { color:var(--muted); font-size:13px; line-height:1.7; }
+    .modal-actions { display:flex; justify-content:end; gap:8px; margin-top:20px; }
+    body.dark { --bg:#201c27; --paper:rgba(46,39,49,.92); --ink:#f9eee8; --muted:#c1afb4; --line:rgba(255,232,224,.13); --shadow:0 18px 50px #0003; background:radial-gradient(ellipse at 10% 0%,#6b444d,transparent 35rem),linear-gradient(#211d29,#29202b); }
+    body.dark .pill, body.dark .icon-btn, body.dark .panel, body.dark .quote-item, body.dark .category-btn, body.dark .mini-btn, body.dark textarea, body.dark .btn-plain { background:#342c38; color:var(--ink); border-color:var(--line); }
+    body.dark .daily-card { background:linear-gradient(130deg,#3b3037,#47323a); border-color:#684b50; }
+    body.dark .daily-card:after { color:#634750; }
+    body.dark .category-btn.active, body.dark .btn-soft { background:#5a3e45; color:#f8d5c6; }
+    body.dark .streak-card { background:linear-gradient(145deg,#463a36,#342c32); }
+    body.dark .journal-prompt { background:#3b323c; color:#e8d6d0; }
+    body.dark .quote-item { background:#302833; }
+    body.dark .day-dot { background:#3b313a; }
+    body.dark .day-dot.done { background:#bb7958; }
+    body.dark .modal { background:#302833; }
+    @media (max-width:800px) { .hero { grid-template-columns:1fr; padding-top:25px; gap:24px; } .sunrise-art { min-height:280px; } .main-grid { grid-template-columns:1fr; padding-top:35px; } .side-stack { grid-template-columns:1fr 1fr; } }
+    @media (max-width:540px) { .wrap { width:min(100% - 24px,1120px); } header { padding:17px 0; } .tagline { display:none; } .brand-mark { width:39px;height:39px; } .top-actions .pill { padding:9px 11px; font-size:12px; } .hero { padding:24px 0 32px; } .hero-copy { font-size:15px; } .sunrise-art { min-height:245px; border-radius:25px; } .daily-card { border-radius:22px; } .quote-actions .btn { flex:1; } .panel { padding:18px; } .side-stack { grid-template-columns:1fr; } .section-head { align-items:start; } .section-head .section-sub { max-width:180px; text-align:right; } .streak-days { gap:3px; } .day-dot { width:27px;height:27px; } }
+  </style>
+</head>
+<body>
+  <header class="wrap">
+    <a class="brand" href="#" aria-label="HOPE home">
+      <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M7 23a9 9 0 0 1 18 0" stroke="#9f644c" stroke-width="2.4" stroke-linecap="round"/><path d="M16 3v4M5 10l3 2M27 10l-3 2M3 20h4M25 20h4" stroke="#9f644c" stroke-width="2.2" stroke-linecap="round"/><path d="M5 26h22" stroke="#9f644c" stroke-width="2.4" stroke-linecap="round"/></svg></span>
+      <span><span class="brand-name">HOPE</span><span class="tagline">A little light for every day</span></span>
+    </a>
+    <div class="top-actions">
+      <span class="pill streak-pill" title="Your daily visit streak">🔥 <span id="headerStreak">0 day streak</span></span>
+      <button class="icon-btn" id="themeToggle" aria-label="Toggle dark mode" title="Toggle theme">☾</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">A fresh start, whenever you need it</div>
+        <h1>There is still<br><span>light ahead.</span></h1>
+        <p class="hero-copy">Some days ask for courage. Others ask for rest. Wherever you are today, you deserve a little kindness and a reason to keep going.</p>
+        <div class="hero-note"><span class="tiny-sun">☀</span><span>Take a breath. You're allowed to begin again.</span></div>
+      </div>
+      <div class="sunrise-art" role="img" aria-label="A warm sunrise above peaceful rolling hills">
+        <div class="art-caption">A new day is possible</div>
+        <div class="hill one"></div><div class="hill two"></div>
+        <div class="art-quote">“Even the smallest step can change the direction of your day.”<small>A gentle reminder from HOPE</small></div>
+      </div>
+    </section>
+
+    <section aria-labelledby="dailyTitle">
+      <div class="section-head">
+        <div><h2 id="dailyTitle">Your Quote of the Day</h2><div class="section-sub">A thought to carry with you.</div></div>
+        <span class="section-sub" id="todayDate"></span>
+      </div>
+      <div class="daily-card">
+        <div class="daily-top"><span class="date-label">✦ Today's little light</span><span class="category-chip" id="dailyCategory">Hope</span></div>
+        <blockquote class="quote-text" id="dailyQuote">You do not have to see the whole staircase. Just take the first step.</blockquote>
+        <div class="quote-author" id="dailyAuthor">— Martin Luther King Jr.</div>
+        <div class="quote-actions">
+          <button class="btn btn-primary" id="copyDaily">▢ Copy quote</button>
+          <button class="btn btn-soft" id="shareDaily">↗ Share</button>
+          <button class="btn btn-plain" id="favoriteDaily">♡ Save favourite</button>
+          <button class="btn btn-plain" id="nextDaily" title="See another quote">↻ Another quote</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="main-grid">
+      <div class="panel" id="explorePanel">
+        <div class="panel-head"><div><h2>Find what you need</h2><div class="small-label">A few words for whatever today feels like.</div></div><span aria-hidden="true" style="font-size:24px">✿</span></div>
+        <div class="category-list" id="categoryList" aria-label="Quote categories"></div>
+        <div class="quote-list" id="quoteList"></div>
+      </div>
+
+      <div class="side-stack">
+        <section class="panel streak-card" aria-labelledby="streakTitle">
+          <div class="panel-head"><div><h2 id="streakTitle">Your little streak</h2><div class="small-label">Showing up for yourself counts.</div></div><span style="font-size:25px" aria-hidden="true">🌞</span></div>
+          <div class="streak-number"><span id="streakNumber">0</span><span style="font-size:20px"> days</span></div>
+          <div class="small-label" id="streakMessage">Every visit is a small promise to yourself.</div>
+          <div class="streak-days" id="streakDays"></div>
+        </section>
+
+        <section class="panel" aria-labelledby="journalTitle">
+          <div class="panel-head"><div><h2 id="journalTitle">A moment of gratitude</h2><div class="small-label">Notice one good thing, however small.</div></div><span style="font-size:23px" aria-hidden="true">♡</span></div>
+          <div class="journal-prompt" id="journalPrompt">What is one small thing that made today a little better?</div>
+          <label for="journalText" class="small-label" style="display:block;margin:0 0 8px">Today, I'm grateful for…</label>
+          <textarea id="journalText" maxlength="2000" placeholder="A kind message, a warm cup of tea, a moment of peace…"></textarea>
+          <div class="journal-footer"><span class="save-status" id="journalStatus">Your note stays on this device.</span><button class="btn btn-primary" id="saveJournal">Save entry</button></div>
+          <div class="journal-history" id="journalHistory"></div>
+        </section>
+      </div>
+    </section>
+
+    <section class="favorites-section" id="favoritesSection">
+      <div class="section-head"><div><h2>Your saved favourites</h2><div class="section-sub">Keep the words you want to return to.</div></div><span class="section-sub" id="favoriteCount">0 saved</span></div>
+      <div class="panel"><div class="quote-list" id="favoriteList"></div></div>
+    </section>
+  </main>
+
+  <footer><div class="wrap footer-inner"><span><strong style="letter-spacing:.15em;color:#bd7565">HOPE</strong> — A little light for every day.</span><span>Made with care. Take what helps; leave what doesn't.</span></div></footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <div class="modal-backdrop" id="privacyModal" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
+    <div class="modal"><h2 id="privacyTitle">Your little corner of HOPE</h2><p>Favourites, journal entries, theme, and streak are stored in this browser on this device using local storage. They are not sent to a server. Clearing browser data or switching devices may remove or hide them, so don't use the journal for information you need to keep private or backed up.</p><div class="modal-actions"><button class="btn btn-primary" id="closePrivacy">Got it</button></div></div>
+  </div>
+
+  <script>
+    "use strict";
+
+    // Original HOPE reminders are marked "HOPE" rather than assigned to a real person.
+    // Named quotations are included with commonly documented wording and attribution.
+    // Verify exact wording and source before using quotations in commercial publishing.
+    const quotes = [
+      {id:"mlk-first-step", text:"You don't have to see the whole staircase, just take the first step.", author:"Martin Luther King Jr.", category:"Courage"},
+      {id:"hope-small-step", text:"Even the smallest step can change the direction of your day.", author:"A gentle reminder from HOPE", category:"Hope"},
+      {id:"anne-frank-good", text:"Where there's hope, there's life. It fills us with fresh courage and makes us strong again.", author:"Anne Frank", category:"Hope"},
+      {id:"roosevelt-sunshine", text:"Keep your face always toward the sunshine—and shadows will fall behind you.", author:"Walt Whitman", category:"Hope"},
+      {id:"maya-courage", text:"Courage is the most important of all the virtues because without courage, you can't practice any other virtue consistently.", author:"Maya Angelou", category:"Courage"},
+      {id:"hope-begin-again", text:"You are allowed to begin again, as many times as you need.", author:"A gentle reminder from HOPE", category:"Healing"},
+      {id:"einstein-life", text:"Life is like riding a bicycle. To keep your balance, you must keep moving.", author:"Albert Einstein", category:"Courage"},
+      {id:"hope-rest", text:"Rest is not giving up. Sometimes it is how you gather the strength to continue.", author:"A gentle reminder from HOPE", category:"Self-kindness"},
+      {id:"mandela-impossible", text:"It always seems impossible until it's done.", author:"Nelson Mandela", category:"Courage"},
+      {id:"hope-enough", text:"You do not need to solve your whole life today. One honest next step is enough.", author:"A gentle reminder from HOPE", category:"Self-kindness"},
+      {id:"helen-keller", text:"Although the world is full of suffering, it is also full of the overcoming of it.", author:"Helen Keller", category:"Resilience"},
+      {id:"hope-clouds", text:"A cloudy chapter is not the whole story. Give the sky time to change.", author:"A gentle reminder from HOPE", category:"Hope"},
+      {id:"tolkien-wander", text:"Not all those who wander are lost.", author:"J. R. R. Tolkien", category:"Growth"},
+      {id:"hope-kindness", text:"The kindness you give yourself today can become the strength you share tomorrow.", author:"A gentle reminder from HOPE", category:"Self-kindness"},
+      {id:"maya-still-rise", text:"You may encounter many defeats, but you must not be defeated.", author:"Maya Angelou", category:"Resilience"},
+      {id:"hope-progress", text:"Progress can be quiet: one breath, one choice, one try at a time.", author:"A gentle reminder from HOPE", category:"Growth"},
+      {id:"roosevelt-dreams", text:"The future belongs to those who believe in the beauty of their dreams.", author:"Eleanor Roosevelt", category:"Growth"},
+      {id:"hope-gratitude", text:"There is something worth noticing in every day, even if it is only that you made it through.", author:"A gentle reminder from HOPE", category:"Gratitude"},
+      {id:"thoreau-dream", text:"Go confidently in the direction of your dreams. Live the life you have imagined.", author:"Henry David Thoreau", category:"Growth"},
+      {id:"hope-healing", text:"Healing is not a race. You can take your time and still be moving forward.", author:"A gentle reminder from HOPE", category:"Healing"},
+      {id:"churchill-success", text:"Success is not final, failure is not fatal: it is the courage to continue that counts.", author:"Often attributed to Winston Churchill; original source uncertain", category:"Resilience"},
+      {id:"hope-listen", text:"You don't have to feel hopeful every minute. Let hope wait beside you until you're ready.", author:"A gentle reminder from HOPE", category:"Healing"},
+      {id:"emerson-finish", text:"Nothing great was ever achieved without enthusiasm.", author:"Ralph Waldo Emerson", category:"Courage"},
+      {id:"hope-tiny", text:"Small joys are still joys. Let them count.", author:"A gentle reminder from HOPE", category:"Gratitude"},
+      {id:"franklin-energy", text:"Energy and persistence conquer all things.", author:"Benjamin Franklin", category:"Resilience"},
+      {id:"hope-self-kindness", text:"Speak to yourself like someone you are responsible for encouraging.", author:"A gentle reminder from HOPE", category:"Self-kindness"},
+      {id:"camus-winter", text:"In the depth of winter, I finally learned that within me there lay an invincible summer.", author:"Albert Camus", category:"Resilience"},
+      {id:"hope-one-thing", text:"You don't need a perfect day to find one meaningful moment.", author:"A gentle reminder from HOPE", category:"Gratitude"},
+      {id:"gandhi-tomorrow", text:"The future depends on what you do today.", author:"Commonly attributed to Mahatma Gandhi", category:"Growth"},
+      {id:"hope-you-belong", text:"You belong in the story of your own becoming. Keep giving yourself a chance.", author:"A gentle reminder from HOPE", category:"Hope"},
+      {id:"dickinson-hope", text:"Hope is the thing with feathers that perches in the soul.", author:"Emily Dickinson", category:"Hope"},
+      {id:"hope-gentle", text:"Be proud of the quiet effort nobody else saw.", author:"A gentle reminder from HOPE", category:"Self-kindness"}
+    ];
+
+    const categories = ["All", "Hope", "Courage", "Healing", "Resilience", "Growth", "Gratitude", "Self-kindness"];
+    const prompts = [
+      "What is one small thing that made today a little better?",
+      "Who made you feel cared for recently, and how?",
+      "What is something about yourself you appreciate today?",
+      "What simple comfort are you thankful for right now?",
+      "What is one thing you handled better than you might have before?",
+      "What is a small moment you want to remember from today?",
+      "What is something you are looking forward to, however small?"
+    ];
+    const STORAGE = { favorites:"hope_favorites_v1", journal:"hope_journal_v1", visits:"hope_visits_v1", theme:"hope_theme_v1", lastQuote:"hope_last_quote_v1" };
+    const $ = (id) => document.getElementById(id);
+    let activeCategory = "All";
+    let dailyQuoteId = "";
+    let toastTimer;
+
+    function readJSON(key, fallback) {
+      try { const value = localStorage.getItem(key); return value === null ? fallback : JSON.parse(value); }
+      catch { return fallback; }
+    }
+    function writeJSON(key, value) {
+      try { localStorage.setItem(key, JSON.stringify(value)); return true; }
+      catch { showToast("Your browser couldn't save this. Check storage settings."); return false; }
+    }
+    function dateKey(date = new Date()) {
+      return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;
+    }
+    function dateFromKey(key) { const [y,m,d] = key.split("-").map(Number); return new Date(y,m-1,d); }
+    function shiftDate(key, amount) { const date = dateFromKey(key); date.setDate(date.getDate()+amount); return dateKey(date); }
+    function formatDate(key, options = {month:"long",day:"numeric",year:"numeric"}) {
+      return dateFromKey(key).toLocaleDateString(undefined, options);
+    }
+    function dayOfYear(date = new Date()) {
+      const start = new Date(date.getFullYear(),0,0);
+      return Math.floor((date - start) / 86400000);
+    }
+    function quoteForDate(key) {
+      const date = dateFromKey(key);
+      const index = Math.floor((Date.UTC(date.getFullYear(),date.getMonth(),date.getDate()) / 86400000) % quotes.length);
+      return quotes[(index + quotes.length) % quotes.length];
+    }
+    function getQuote(id) { return quotes.find(q => q.id === id); }
+    function getFavorites() { return readJSON(STORAGE.favorites, []); }
+    function isFavorite(id) { return getFavorites().includes(id); }
+    function escapeHTML(value) {
+      return String(value).replace(/[&<>"']/g, char => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[char]));
+    }
+    function quoteText(q) { return `“${q.text}” — ${q.author}`; }
+    function showToast(message) {
+      const toast = $("toast"); toast.textContent = message; toast.classList.add("show");
+      clearTimeout(toastTimer); toastTimer = setTimeout(() => toast.classList.remove("show"), 2400);
+    }
+    async function copyText(text) {
+      try {
+        if (navigator.clipboard && window.isSecureContext) await navigator.clipboard.writeText(text);
+        else {
+          const area = document.createElement("textarea"); area.value = text; area.style.position = "fixed"; area.style.opacity = "0";
+          document.body.appendChild(area); area.select(); const ok = document.execCommand("copy"); area.remove();
+          if (!ok) throw new Error("Copy unavailable");
+        }
+        showToast("Quote copied — share a little hope ✨");
+      } catch { showToast("Copy wasn't available here. You can select the quote and copy it."); }
+    }
+    async function shareQuote(q) {
+      const text = quoteText(q);
+      if (navigator.share) {
+        try { await navigator.share({title:"HOPE — A little light for every day", text}); }
+        catch (error) { if (error.name !== "AbortError") copyText(text); }
+      } else copyText(text);
+    }
+    function renderDaily(q) {
+      dailyQuoteId = q.id;
+      $("dailyQuote").textContent = q.text;
+      $("dailyAuthor").textContent = `— ${q.author}`;
+      $("dailyCategory").textContent = q.category;
+      $("favoriteDaily").classList.toggle("saved", isFavorite(q.id));
+      $("favoriteDaily").textContent = isFavorite(q.id) ? "♥ Saved" : "♡ Save favourite";
+    }
+    function setDaily(q) {
+      renderDaily(q);
+      writeJSON(STORAGE.lastQuote, q.id);
+    }
+    function renderCategoryButtons() {
+      $("categoryList").innerHTML = categories.map(cat => `<button class="category-btn ${cat===activeCategory?"active":""}" data-category="${escapeHTML(cat)}" aria-pressed="${cat===activeCategory}">${escapeHTML(cat)}</button>`).join("");
+      $("categoryList").querySelectorAll("button").forEach(button => button.addEventListener("click", () => {
+        activeCategory = button.dataset.category; renderCategoryButtons(); renderQuoteList();
+      }));
+    }
+    function quoteItem(q, context = "browse") {
+      const saved = isFavorite(q.id);
+      return `<article class="quote-item">
+        <div class="quote-item-top"><span class="quote-cat">${escapeHTML(q.category)}</span>
+          <div class="mini-actions">
+            <button class="mini-btn" data-action="copy" data-id="${q.id}" aria-label="Copy quote" title="Copy">▢</button>
+            <button class="mini-btn" data-action="favorite" data-id="${q.id}" aria-label="${saved?"Remove favourite":"Save favourite"}" title="${saved?"Unsave":"Save"}">${saved?"♥":"♡"}</button>
+            ${context==="browse" ? `<button class="mini-btn" data-action="daily" data-id="${q.id}" aria-label="Show as today's quote" title="Show quote">↗</button>` : ""}
+          </div>
+        </div>
+        <p>“${escapeHTML(q.text)}”</p><div class="author">— ${escapeHTML(q.author)}</div>
+      </article>`;
+    }
+    function attachQuoteActions(root) {
+      root.querySelectorAll("[data-action]").forEach(button => button.addEventListener("click", async () => {
+        const q = getQuote(button.dataset.id); if (!q) return;
+        if (button.dataset.action === "copy") await copyText(quoteText(q));
+        if (button.dataset.action === "favorite") toggleFavorite(q.id);
+        if (button.dataset.action === "daily") {
+          setDaily(q); window.scrollTo({top:$("dailyTitle").getBoundingClientRect().top + window.scrollY - 20,behavior:"smooth"});
+        }
+      }));
+    }
+    function renderQuoteList() {
+      const list = quotes.filter(q => activeCategory === "All" || q.category === activeCategory);
+      $("quoteList").innerHTML = list.map(q => quoteItem(q)).join("");
+      attachQuoteActions($("quoteList"));
+    }
+    function renderFavorites() {
+      const ids = getFavorites(); const list = ids.map(getQuote).filter(Boolean);
+      $("favoriteCount").textContent = `${list.length} saved`;
+      $("favoriteList").innerHTML = list.length ? list.map(q => quoteItem(q,"favorites")).join("") : `<div class="empty">Your favourite quotes will live here.<br>Tap ♡ on any quote that speaks to you.</div>`;
+      attachQuoteActions($("favoriteList"));
+    }
+    function toggleFavorite(id) {
+      let favorites = getFavorites();
+      if (favorites.includes(id)) { favorites = favorites.filter(x => x !== id); showToast("Removed from favourites."); }
+      else { favorites.unshift(id); showToast("Saved to your favourites ♥"); }
+      writeJSON(STORAGE.favorites, favorites);
+      renderDaily(getQuote(dailyQuoteId) || quoteForDate(dateKey()));
+      renderQuoteList(); renderFavorites();
+    }
+    function getVisits() {
+      const visits = readJSON(STORAGE.visits, []);
+      return Array.isArray(visits) ? [...new Set(visits)].sort() : [];
+    }
+    function recordVisit() {
+      const today = dateKey(); let visits = getVisits();
+      if (!visits.includes(today)) visits.push(today);
+      writeJSON(STORAGE.visits, visits);
+    }
+    function streakCount() {
+      const visits = new Set(getVisits()); let cursor = dateKey();
+      if (!visits.has(cursor)) cursor = shiftDate(cursor,-1);
+      let count = 0;
+      while (visits.has(cursor) && count < 3650) { count++; cursor = shiftDate(cursor,-1); }
+      return count;
+    }
+    function renderStreak() {
+      const count = streakCount();
+      $("headerStreak").textContent = `${count} day${count===1?"":"s"} streak`;
+      $("streakNumber").textContent = count;
+      $("streakMessage").textContent = count===0 ? "Every visit is a small promise to yourself." : count===1 ? "One day at a time. You showed up today." : "Look at you, making space for yourself.";
+      const today = dateKey(); const visits = new Set(getVisits()); const weekdays = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+      const start = dateFromKey(today); start.setDate(start.getDate()-6);
+      $("streakDays").innerHTML = Array.from({length:7},(_,i) => {
+        const date = new Date(start); date.setDate(start.getDate()+i); const key = dateKey(date);
+        return `<div class="day"><div class="day-dot ${visits.has(key)?"done":""} ${key===today?"today":""}">${visits.has(key)?"✓":date.getDate()}</div>${weekdays[date.getDay()]}</div>`;
+      }).join("");
+    }
+    function getJournal() { return readJSON(STORAGE.journal, {}); }
+    function renderJournal() {
+      const today = dateKey(); const entries = getJournal();
+      $("journalText").value = entries[today] || "";
+      $("journalStatus").textContent = entries[today] ? "Today's reflection is saved on this device." : "Your note stays on this device.";
+      $("journalPrompt").textContent = prompts[dayOfYear() % prompts.length];
+      const previous = Object.keys(entries).filter(key => key !== today && entries[key]).sort().reverse().slice(0,3);
+      $("journalHistory").innerHTML = previous.length ? `<div class="small-label" style="margin:5px 0">Past reflections</div>` + previous.map(key => `<div class="journal-entry"><strong>${escapeHTML(formatDate(key,{month:"short",day:"numeric",year:"numeric"}))}</strong>${escapeHTML(entries[key].length>170?entries[key].slice(0,170)+"…":entries[key])}</div>`).join("") : "";
+    }
+    function saveJournal() {
+      const entries = getJournal(); const today = dateKey(); const value = $("journalText").value.trim();
+      if (value) entries[today] = value; else delete entries[today];
+      if (writeJSON(STORAGE.journal, entries)) {
+        $("journalStatus").textContent = value ? "Saved just for you on this device ✓" : "Today's entry cleared.";
+        renderJournalHistoryOnly(); showToast(value ? "Your reflection is saved." : "Today's entry cleared.");
+      }
+    }
+    function renderJournalHistoryOnly() {
+      const entries = getJournal(); const today = dateKey();
+      const previous = Object.keys(entries).filter(key => key !== today && entries[key]).sort().reverse().slice(0,3);
+      $("journalHistory").innerHTML = previous.length ? `<div class="small-label" style="margin:5px 0">Past reflections</div>` + previous.map(key => `<div class="journal-entry"><strong>${escapeHTML(formatDate(key,{month:"short",day:"numeric",year:"numeric"}))}</strong>${escapeHTML(entries[key].length>170?entries[key].slice(0,170)+"…":entries[key])}</div>`).join("") : "";
+    }
+    function applyTheme(theme) {
+      document.body.classList.toggle("dark", theme === "dark");
+      $("themeToggle").textContent = theme === "dark" ? "☀" : "☾";
+      $("themeToggle").setAttribute("aria-label", theme === "dark" ? "Switch to light mode" : "Switch to dark mode");
+      try { localStorage.setItem(STORAGE.theme, theme); } catch {}
+    }
+    function init() {
+      const today = dateKey();
+      $("todayDate").textContent = formatDate(today,{weekday:"long",month:"short",day:"numeric"});
+      recordVisit(); renderStreak(); renderCategoryButtons(); renderQuoteList(); renderFavorites(); renderJournal();
+      const defaultQuote = quoteForDate(today);
+      // Keep the quote stable for the calendar day, even if another quote was previewed.
+      renderDaily(defaultQuote);
+      applyTheme(readJSON(STORAGE.theme,"light"));
+      $("copyDaily").addEventListener("click", () => copyText(quoteText(getQuote(dailyQuoteId))));
+      $("shareDaily").addEventListener("click", () => shareQuote(getQuote(dailyQuoteId)));
+      $("favoriteDaily").addEventListener("click", () => toggleFavorite(dailyQuoteId));
+      $("nextDaily").addEventListener("click", () => {
+        const current = quotes.findIndex(q => q.id === dailyQuoteId);
+        const next = quotes[(current+1)%quotes.length]; renderDaily(next);
+        showToast("A different little light for you.");
+      });
+      $("saveJournal").addEventListener("click", saveJournal);
+      $("themeToggle").addEventListener("click", () => applyTheme(document.body.classList.contains("dark")?"light":"dark"));
+      $("closePrivacy").addEventListener("click", () => $("privacyModal").classList.remove("open"));
+      $("privacyModal").addEventListener("click", e => { if (e.target === $("privacyModal")) $("privacyModal").classList.remove("open"); });
+      // Show privacy note once, without blocking the app.
+      try { if (!localStorage.getItem("hope_privacy_seen_v1")) { $("privacyModal").classList.add("open"); localStorage.setItem("hope_privacy_seen_v1","1"); } } catch {}
+    }
+    init();
+  </script>
+</body>
+</html>
